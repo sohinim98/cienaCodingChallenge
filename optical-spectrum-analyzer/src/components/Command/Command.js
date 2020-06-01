@@ -6,7 +6,7 @@ import './Command.scss';
 
 export const Command = () => {
 
-  const [ serverReady, setServerReady ] = useState(true);
+  const [ serverReady, setServerReady ] = useState(false);
   const [ userCommand, setUserCommand ] = useState('');
   const [ response, setResponse ] = useState('');
   const [ xLabel, setXLabel ] = useState('');
