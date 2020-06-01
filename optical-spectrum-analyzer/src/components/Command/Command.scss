@@ -1,0 +1,51 @@
+.command {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  text-align: center;
+
+  .command--input {
+    border-radius: var(--border-radius--lg);
+    font-size: 17px;
+    max-width: 100%;
+    padding: 8px;
+    width: 546px;
+  }
+  .command--actions {
+    padding: var(--spacer--lg);
+    display: flex;
+    flex-direction: column;
+    .command--action {
+      background: var(--base--green--dark);
+      border: none;
+      margin: var(--spacer--sm);
+    }
+  }
+  .command--action,
+  .commmand-query {
+    border-radius: var(--border-radius--lg);
+    cursor: pointer;
+    font: 12px/15px "Proxima Nova", sans-serif;
+    font-weight: 600;
+    width: 102px;
+    padding: 3px 10px;
+    text-transform: uppercase;
+  }
+  .commmand-query {
+    background: none;
+    border: 1px solid var(--base--white);
+    color: var(--base--white);
+    height: 32px;
+    margin-left: var(--spacer--sm);
+  }
+}
+
+/* Desktop */
+@media only screen and (min-width: 1024px) {
+  .command {
+    .command--actions {
+      flex-direction: row;
+    }
+  }
+}
