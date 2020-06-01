@@ -11,6 +11,9 @@ export const Command = () => {
   const [ response, setResponse ] = useState('');
   const [ xLabel, setXLabel ] = useState('');
   const [ yLabel, setYLabel ] = useState('');
+  const [ limit, setLimit ] = useState([]);
+  const [ xData, setXData ] = useState([]);
+  const [ yData, setYData ] = useState([]);
 
   useEffect(() => {
     axios
@@ -29,8 +32,8 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/'+userCommand)
       .then(res => {
         if (res.status === 200) {
+          console.log('success', res);
           setResponse(res.data);
-          console.log("cmd", userCommand);
           if(userCommand === 'START') {
             getTrace();
           }
@@ -43,12 +46,11 @@ export const Command = () => {
   }
   const setAction = (event) => {
     setUserCommand(event.target.id);
-    console.log("cmd", userCommand);
     axios
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/'+userCommand)
       .then(res => {
         if (res.status === 200) {
-          setResponse(userCommand+' '+res.data);
+          setResponse(res.data);
           if(userCommand === 'START') {
             getTrace();
           }
@@ -62,10 +64,27 @@ export const Command = () => {
 
   const getTrace = () => {
     axios
+      .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/LIM')
+      .then(res => {
+        if (res.status === 200) {
+          setLimit([1,2]);
+          // get limits
+          console.log("lim", res.data);
+        }
+      })
+      .catch(error => {
+        console.log('error', error);
+      })
+    axios
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/TRACE')
       .then(res => {
         if (res.status === 200) {
-          console.log("hi", res.data.xLabel);
+          const selectedXdata = res.data.xdata.filter((elem, index) => index > 1500 && index < 1505);
+          console.log('error', selectedXdata);
+          setXLabel(selectedXdata);
+          setYLabel(res.data.ylabel);
+          setXData(res.data.xdata);
+          setYData(res.data.ydata);
         }
       })
       .catch(error => {
@@ -73,20 +92,14 @@ export const Command = () => {
       })
   }
   const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+  labels: [xData],
   datasets: [
     {
-      label: "First dataset",
-      data: [33, 53, 85, 41, 44, 65],
+      label: yLabel,
+      data: yData,
       fill: true,
       backgroundColor: "rgba(75,192,192,0.2)",
       borderColor: "rgba(75,192,192,1)"
-    },
-    {
-      label: "Second dataset",
-      data: [33, 25, 35, 51, 54, 76],
-      fill: false,
-      borderColor: "#742774"
     }
   ]
 };
@@ -110,7 +123,9 @@ export const Command = () => {
           </div>
           <h1>Instrument Response</h1>
           { response }
-          <Line data={data} />
+          <Line
+            data={data}
+          />
         </div>
       ) : (
         'Server not responding...'
