@@ -17,9 +17,9 @@ and allow users to send different commands and receive response from the instrum
 * `TRACE` - Returns OSA trace in json format
 ### Type into the input container and hit `Query`
 ### Action buttons -
-* `START` (to set instrument state to continuous acquisition and draw the graph),
+* `START` (to set instrument state to continuous acquisition and draw the graph)
 * `STOP` (to sets instrument state to IDLE and clear the graph)
-* `SINGLE` - starts a single scan (blocking operation, single scan takes few seconds)
+* `SINGLE` (starts a single scan (blocking operation, single scan takes few seconds)
 and draws the graph.
 
 ## To run it locally -
