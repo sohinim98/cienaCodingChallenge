@@ -16,8 +16,10 @@ and allow users to send different commands and receive response from the instrum
 * `STATE` - Returns instrument state
 * `TRACE` - Returns OSA trace in json format
 ### Type into the input container and hit `Query`
-### Action buttons - `START` (to set instrument state to continuous acquisition and draw the graph),
-`STOP` (to sets instrument state to IDLE and clear the graph), `SINGLE` - starts a single scan (blocking operation, single scan takes few seconds)
+### Action buttons -
+* `START` (to set instrument state to continuous acquisition and draw the graph),
+* `STOP` (to sets instrument state to IDLE and clear the graph)
+* `SINGLE` - starts a single scan (blocking operation, single scan takes few seconds)
 and draws the graph.
 
 ## To run it locally -
@@ -27,5 +29,5 @@ and draws the graph.
 
 ## A couple of notes -
 * I did not realize that using a python framework was compulsory, so I built it using React instead.
-Hope that's okay since React was also a part of the tech stack in the posting
-* Continuous (repetitive) acquisition with ~1Hz refresh rate caused rate limiting, so I reduced it to making a single request per START command
+Hope that's okay since React was also a part of the tech stack in the posting.
+* Continuous (repetitive) acquisition with ~1Hz refresh rate caused rate limiting, so I reduced it to making a single request per START command.
