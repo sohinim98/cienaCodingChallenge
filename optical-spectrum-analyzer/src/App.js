@@ -7,7 +7,10 @@ import Command from './components/Command/Command'
 export const App = () => {
 
   return (
-    <Command />
+    <>
+      <h1 className="app--header">Cloud Optical Spectrum Analyzer</h1>
+      <Command />
+    </>
   );
 }
 

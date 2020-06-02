@@ -18,9 +18,15 @@ body {
   font-family: "proxima-nova", sans-serif;
   background: var(--base--grey--dark);
   color: var(--base--white);
+  text-align: center;
 }
 
 a {
   color: var(--base--white);
   text-decoration: none;
+}
+
+.app--header {
+  font: normal 32px/35px "proxima-nova", sans-serif;
+  padding-top: var(--spacer--lg);
 }

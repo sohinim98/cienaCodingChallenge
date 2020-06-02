@@ -75,6 +75,7 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/LIM')
       .then(res => {
         if (res.status === 200) {
+          console.log("success", res);
           setLowerLimit(res.data.substring(8, 12));
           setUpperLimit(res.data.substring(13, 18));
         }
