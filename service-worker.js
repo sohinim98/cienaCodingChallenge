@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/cienaCodingChallenge/precache-manifest.c95056065eb4c30bbb9fa613a789f92d.js"
+  "/cienaCodingChallenge/precache-manifest.94b420ea27431685b4b9a92a87edbd3b.js"
 );
 
 self.addEventListener('message', (event) => {
