@@ -11,7 +11,8 @@ export const Command = () => {
   const [ response, setResponse ] = useState('');
   const [ xLabel, setXLabel ] = useState('');
   const [ yLabel, setYLabel ] = useState('');
-  const [ limit, setLimit ] = useState([]);
+  const [ lowerLimit, setLowerLimit ] = useState('');
+  const [ upperLimit, setUpperLimit ] = useState('');
   const [ xData, setXData ] = useState([]);
   const [ yData, setYData ] = useState([]);
 
@@ -32,8 +33,7 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/'+userCommand)
       .then(res => {
         if (res.status === 200) {
-          console.log('success', res);
-          setResponse(res.data);
+          setResponse(JSON.stringify(res.data).substring(0, 200));
           if(userCommand === 'START') {
             getTrace();
           }
@@ -50,7 +50,7 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/'+userCommand)
       .then(res => {
         if (res.status === 200) {
-          setResponse(res.data);
+          setResponse(JSON.stringify(res.data).substring(0, 200));
           if(userCommand === 'START') {
             getTrace();
           }
@@ -67,9 +67,8 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/LIM')
       .then(res => {
         if (res.status === 200) {
-          setLimit([1,2]);
-          // get limits
-          console.log("lim", res.data);
+          setLowerLimit(res.data.substring(8, 12));
+          setUpperLimit(res.data.substring(13, 18));
         }
       })
       .catch(error => {
@@ -79,11 +78,10 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/TRACE')
       .then(res => {
         if (res.status === 200) {
-          const selectedXdata = res.data.xdata.filter((elem, index) => index > 1500 && index < 1505);
-          console.log('error', selectedXdata);
-          setXLabel(selectedXdata);
+          const selectedXdata = res.data.xdata.filter((elem, index) => index > Number(lowerLimit) && index < Number(upperLimit));
+          setXLabel(res.data.xlabel);
           setYLabel(res.data.ylabel);
-          setXData(res.data.xdata);
+          setXData(selectedXdata);
           setYData(res.data.ydata);
         }
       })
@@ -122,9 +120,35 @@ export const Command = () => {
             <button onClick={setAction} id="SINGLE" className="command--action">Single Trace</button>
           </div>
           <h1>Instrument Response</h1>
-          { response }
+          <div className="command--response">
+            { response }
+          </div>
           <Line
+            width={900}
+            height={550}
             data={data}
+            options={{
+              scales: {
+                xAxes: [
+                  {
+                    ticks: {
+                      display: false,
+                      min: Number(lowerLimit),
+                      max: Number(upperLimit),
+                      stepSize: 0.0001
+                    }
+                  }
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      max: yData[0],
+                      stepSize: 0.0001
+                    }
+                  }
+                ]
+              }
+            }}
           />
         </div>
       ) : (

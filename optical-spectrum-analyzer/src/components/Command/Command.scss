@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Tenali+Ramakrishna&display=swap");
 .command {
   align-items: center;
   display: flex;
-  height: 100vh;
   justify-content: center;
   text-align: center;
+  padding-top: var(--spacer--lg);
 
   .command--input {
     border-radius: var(--border-radius--lg);
@@ -17,7 +18,7 @@
     display: flex;
     flex-direction: column;
     .command--action {
-      background: var(--base--green--dark);
+      background: var(--base--green);
       border: none;
       margin: var(--spacer--sm);
     }
@@ -38,6 +39,16 @@
     color: var(--base--white);
     height: 32px;
     margin-left: var(--spacer--sm);
+  }
+  .command--response {
+    align-items: center;
+    background: var(--base--grey);
+    display: flex;
+    font: 30px/35px "Tenali Ramakrishna", sans-serif;
+    min-height: 200px;
+    justify-content: center;
+    width: 100%;
+    text-transform: lowercase;
   }
 }
 
