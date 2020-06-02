@@ -6,6 +6,7 @@ import './Command.scss';
 
 export const Command = () => {
 
+  const [ graphReset, setGraphReset ] = useState(true);
   const [ serverReady, setServerReady ] = useState(false);
   const [ userCommand, setUserCommand ] = useState('');
   const [ response, setResponse ] = useState('');
@@ -37,6 +38,9 @@ export const Command = () => {
           if(userCommand === 'START') {
             getTrace();
           }
+          else if(userCommand === 'STOP') {
+            setGraphReset(true);
+          }
         }
       })
       .catch(error => {
@@ -53,6 +57,9 @@ export const Command = () => {
           setResponse(JSON.stringify(res.data).substring(0, 200));
           if(userCommand === 'START') {
             getTrace();
+          }
+          else if(userCommand === 'STOP') {
+            setGraphReset(true);
           }
         }
       })
@@ -78,6 +85,7 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/TRACE')
       .then(res => {
         if (res.status === 200) {
+          setGraphReset(false);
           const selectedXdata = res.data.xdata.filter((elem, index) => index > Number(lowerLimit) && index < Number(upperLimit));
           setXLabel(res.data.xlabel);
           setYLabel(res.data.ylabel);
@@ -123,33 +131,35 @@ export const Command = () => {
           <div className="command--response">
             { response }
           </div>
-          <Line
-            width={900}
-            height={550}
-            data={data}
-            options={{
-              scales: {
-                xAxes: [
-                  {
-                    ticks: {
-                      display: false,
-                      min: Number(lowerLimit),
-                      max: Number(upperLimit),
-                      stepSize: 0.0001
+          { graphReset ? 'Type START to draw the graph...' : (
+            <Line
+              width={900}
+              height={550}
+              data={data}
+              options={{
+                scales: {
+                  xAxes: [
+                    {
+                      ticks: {
+                        display: false,
+                        min: Number(lowerLimit),
+                        max: Number(upperLimit),
+                        stepSize: 0.0001
+                      }
                     }
-                  }
-                ],
-                yAxes: [
-                  {
-                    ticks: {
-                      max: yData[0],
-                      stepSize: 0.0001
+                  ],
+                  yAxes: [
+                    {
+                      ticks: {
+                        max: yData[0],
+                        stepSize: 0.0001
+                      }
                     }
-                  }
-                ]
-              }
-            }}
-          />
+                  ]
+                }
+              }}
+            />
+          )}
         </div>
       ) : (
         'Server not responding...'
