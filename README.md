@@ -2,6 +2,9 @@
 A single page web app to connect to an Optical Spectrum Analyzer through the cloud
 and allow users to send different commands and receive response from the instrument
 
+The data is plotted for the range returned by `LIM` and sometimes leads to
+a flat curve because of similar data values.
+
 ## Deployed using GitHub Pages at
 [Cloud Optical Spectrum Analyzer](https://sohinim98.github.io/cienaCodingChallenge/)
 
