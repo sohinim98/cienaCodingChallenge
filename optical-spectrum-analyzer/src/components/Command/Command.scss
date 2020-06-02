@@ -13,10 +13,14 @@
     padding: 8px;
     width: 546px;
   }
+  .command--note {
+    padding: var(--spacer--sm) 0;
+  }
   .command--actions {
     padding: var(--spacer--lg);
     display: flex;
     flex-direction: column;
+    margin: 0 auto;
     .command--action {
       background: var(--base--green);
       border: none;
@@ -45,6 +49,7 @@
     background: var(--base--grey);
     display: flex;
     font: 30px/35px "Tenali Ramakrishna", sans-serif;
+    margin-bottom: var(--spacer--sm);
     min-height: 200px;
     justify-content: center;
     width: 100%;

@@ -9,7 +9,7 @@ export const Command = () => {
   const [ graphReset, setGraphReset ] = useState(true);
   const [ serverReady, setServerReady ] = useState(false);
   const [ userCommand, setUserCommand ] = useState('');
-  const [ response, setResponse ] = useState('');
+  const [ response, setResponse ] = useState('$ The response shows up here...');
   const [ xLabel, setXLabel ] = useState('');
   const [ yLabel, setYLabel ] = useState('');
   const [ lowerLimit, setLowerLimit ] = useState('');
@@ -34,8 +34,8 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/'+userCommand)
       .then(res => {
         if (res.status === 200) {
-          setResponse(JSON.stringify(res.data).substring(0, 200));
-          if(userCommand === 'START') {
+          setResponse('$ ' + JSON.stringify(res.data).substring(0, 200));
+          if(userCommand === 'START' || userCommand === 'SINGLE') {
             getTrace();
           }
           else if(userCommand === 'STOP') {
@@ -45,27 +45,28 @@ export const Command = () => {
       })
       .catch(error => {
         console.log('error', error);
-        setResponse(error.message);
+        setResponse('$' + error.message);
       })
   }
   const setAction = (event) => {
     setUserCommand(event.target.id);
+    let currentCommand = event.target.id;
     axios
-      .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/'+userCommand)
+      .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/'+currentCommand)
       .then(res => {
         if (res.status === 200) {
-          setResponse(JSON.stringify(res.data).substring(0, 200));
-          if(userCommand === 'START') {
+          setResponse('$ ' + JSON.stringify(res.data).substring(0, 200));
+          if(currentCommand === 'START' || currentCommand === 'SINGLE') {
             getTrace();
           }
-          else if(userCommand === 'STOP') {
+          else if(currentCommand === 'STOP') {
             setGraphReset(true);
           }
         }
       })
       .catch(error => {
         console.log('error', error);
-        setResponse(error.message);
+        setResponse('$ ' + error.message);
       })
   }
 
@@ -121,49 +122,50 @@ export const Command = () => {
             onChange={event => setUserCommand(event.target.value.toUpperCase())}
             placeholder="eg - IDN"
           />
-          <button onClick={makeQuery} className="commmand-query">Query</button>
-          <div className="command--actions">
-            <button onClick={setAction} id="START" className="command--action">Start</button>
-            <button onClick={setAction} id="STOP" className="command--action">Stop</button>
-            <button onClick={setAction} id="SINGLE" className="command--action">Single Trace</button>
-          </div>
-          <h1>Instrument Response</h1>
-          <div className="command--response">
-            { response }
-          </div>
-          { graphReset ? 'Type START to draw the graph...' : (
-            <Line
-              width={900}
-              height={550}
-              data={data}
-              options={{
-                scales: {
-                  xAxes: [
-                    {
-                      ticks: {
-                        display: false,
-                        min: Number(lowerLimit),
-                        max: Number(upperLimit),
-                        stepSize: 0.0001
+        <div className="command--note">*Note - The query 'SINGLE' takes a while to get a response</div>
+            <button onClick={makeQuery} className="commmand-query">Query</button>
+            <div className="command--actions">
+              <button onClick={setAction} id="START" className="command--action">Start</button>
+              <button onClick={setAction} id="STOP" className="command--action">Stop</button>
+              <button onClick={setAction} id="SINGLE" className="command--action">Single Trace</button>
+            </div>
+            <h1>Instrument Response</h1>
+            <div className="command--response">
+              { response }
+            </div>
+            { graphReset ? 'Type START to draw the graph...' : (
+              <Line
+                width={900}
+                height={550}
+                data={data}
+                options={{
+                  scales: {
+                    xAxes: [
+                      {
+                        ticks: {
+                          display: false,
+                          min: Number(lowerLimit),
+                          max: Number(upperLimit),
+                          stepSize: 0.0001
+                        }
                       }
-                    }
-                  ],
-                  yAxes: [
-                    {
-                      ticks: {
-                        max: yData[0],
-                        stepSize: 0.0001
+                    ],
+                    yAxes: [
+                      {
+                        ticks: {
+                          max: yData[0],
+                          stepSize: 0.0001
+                        }
                       }
-                    }
-                  ]
-                }
-              }}
-            />
-          )}
-        </div>
-      ) : (
-        'Server not responding...'
-      )}
+                    ]
+                  }
+                }}
+              />
+            )}
+          </div>
+        ) : (
+          'Server not responding...'
+        )}
     </div>
   );
 }
