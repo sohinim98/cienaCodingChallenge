@@ -110,7 +110,7 @@ export const Command = () => {
             className="command--input"
             type="text"
             value={userCommand}
-            onChange={e => setUserCommand(e.target.value)}
+            onChange={event => setUserCommand(event.target.value.toUpperCase())}
             placeholder="eg - IDN"
           />
           <button onClick={makeQuery} className="commmand-query">Query</button>
