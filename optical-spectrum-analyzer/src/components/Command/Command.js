@@ -16,6 +16,8 @@ export const Command = () => {
   const [ upperLimit, setUpperLimit ] = useState('');
   const [ xData, setXData ] = useState([]);
   const [ yData, setYData ] = useState([]);
+  const [ yMax, setYMax ] = useState(0);
+  const [ yMin, setYMin ] = useState(0);
 
   useEffect(() => {
     axios
@@ -75,7 +77,6 @@ export const Command = () => {
       .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/LIM')
       .then(res => {
         if (res.status === 200) {
-          console.log("success", res);
           setLowerLimit(res.data.substring(8, 12));
           setUpperLimit(res.data.substring(13, 18));
         }
@@ -83,22 +84,38 @@ export const Command = () => {
       .catch(error => {
         console.log('error', error);
       })
-    axios
-      .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/TRACE')
-      .then(res => {
-        if (res.status === 200) {
-          setGraphReset(false);
-          const selectedXdata = res.data.xdata.filter((elem, index) => index > Number(lowerLimit) && index < Number(upperLimit));
-          setXLabel(res.data.xlabel);
-          setYLabel(res.data.ylabel);
-          setXData(selectedXdata);
-          setYData(res.data.ydata);
-        }
-      })
-      .catch(error => {
-        console.log('error', error);
-      })
   }
+
+  useEffect(() => {
+    axios
+    .get('https://cors-anywhere.herokuapp.com/http://flaskosa.herokuapp.com/cmd/TRACE')
+    .then(res => {
+      if (res.status === 200) {
+        const selectedXdata = res.data.xdata.filter((elem, index) => index > Number(lowerLimit) && index < Number(upperLimit));
+        const selectedYdata = res.data.ydata.filter((elem, index) => index > Number(lowerLimit) && index < Number(upperLimit));
+        const currYMax = selectedYdata.reduce((prev, current) => {
+          return (prev > current) ? prev : current;
+        })
+        const currYMin = selectedYdata.reduce((prev, current) => {
+          return (prev < current) ? prev : current;
+        })
+        setYMax(currYMax);
+        setYMin(currYMin);
+        setXLabel(res.data.xlabel);
+        setYLabel(res.data.ylabel);
+        setXData(selectedXdata);
+        setYData(selectedYdata);
+        if (upperLimit !== 0 && lowerLimit !== 0) {
+          setGraphReset(false);
+        }
+      }
+    })
+    .catch(error => {
+      console.log('error', error);
+    })
+  }, [upperLimit, lowerLimit])
+
+
   const data = {
   labels: [xData],
   datasets: [
@@ -154,8 +171,10 @@ export const Command = () => {
                     yAxes: [
                       {
                         ticks: {
-                          max: yData[0],
-                          stepSize: 0.0001
+
+                          min: yMin,
+                          max: yMax,
+                          stepSize: 0.001
                         }
                       }
                     ]
