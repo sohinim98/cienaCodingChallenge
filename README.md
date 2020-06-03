@@ -30,7 +30,5 @@ and draws the graph.
 ## To deploy -
 ### `npm run deploy`
 
-## A couple of notes -
-* I did not realize that using a python framework was compulsory, so I built it using React instead.
-Hope that's okay since React was also a part of the tech stack in the posting.
+## Note -
 * Continuous (repetitive) acquisition with ~1Hz refresh rate caused rate limiting, so I reduced it to making a single request per START command.
