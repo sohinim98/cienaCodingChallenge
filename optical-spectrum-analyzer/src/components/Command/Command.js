@@ -18,6 +18,7 @@ export const Command = () => {
   const [ yData, setYData ] = useState([]);
   const [ yMax, setYMax ] = useState(0);
   const [ yMin, setYMin ] = useState(0);
+  const [ traceCalledToggle, setTraceCalledToggle ] = useState(false);
 
   useEffect(() => {
     axios
@@ -79,6 +80,7 @@ export const Command = () => {
         if (res.status === 200) {
           setLowerLimit(res.data.substring(8, 12));
           setUpperLimit(res.data.substring(13, 18));
+          setTraceCalledToggle(!traceCalledToggle);
         }
       })
       .catch(error => {
@@ -113,7 +115,7 @@ export const Command = () => {
     .catch(error => {
       console.log('error', error);
     })
-  }, [upperLimit, lowerLimit])
+  }, [upperLimit, lowerLimit, traceCalledToggle])
 
 
   const data = {
